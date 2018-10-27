@@ -7,6 +7,7 @@ function preload() {
 }
 // @TODO Make a key class with key code and boolean
 
+var bmpText;
 var spaceKey;
 var spaceKeyIsDown = false;
 var aKey;
@@ -429,11 +430,13 @@ function update() {
     }
 
     // Draw our text
-    game.add.bitmapText(10, 10, 'atari', letterText, 32);
+    bmpText = game.add.bitmapText(10, 10, 'atari', letterText, 32);
+    bmpText.maxWidth = 400;
+
 
 }
 
 function draw_letter(whichKey) {
     newText = letterText + whichKey;
-    letterText = newText;
+    bmpText.text = newText;
 }
