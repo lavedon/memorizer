@@ -203,55 +203,11 @@ function every_sentence_convert(sentences) {
             myCSV[rowNum] = row;
             rowNum++;
             row = [];
-        }
+            }
         // OR do this with a 2D array
         // that has each sentence and all of it's chunks.
-
-    
-
-
-
-        
         }
-
-
-            
     }
-    
-
-}
-
-    
-/*
-        for (i = sentence.length; i > -1; i--) { 
-            tempSentence = sentences[i];
-            // Chunk first sentence
-            break_up_sentence(tempSentence);
-            // make a function
-            debugger;
-            row[0] = underlineReplace(tempSentence);
-            row[1] = sentence;
-            myCSV[rowNum] = row;
-            row = [];
-            rowNum++;
-
-            row[0] = first_letters(tempSentence);
-            row[1] = sentence;
-            myCSV[rowNum] = row;
-            row = [];
-            rowNum++;
-            
-            row[0] = first_two_words(tempSentence);
-            row[1] = sentence;
-            myCSV[rowNum] = row;
-            row = [];
-            rowNum++;
-            console.log(myCSV);
-            break;
-        */
-
-
-
 
 function number_of_sentences() {
     // count the number of sentences
