@@ -17,7 +17,7 @@ var sentences;
 var myText = "";
 
 var randIndex = 0;
-var myCSV = [];
+var myCSV = [["", ""], ["", ""]];
 var rowNum = 0;
 var row = [];
 
@@ -154,6 +154,36 @@ function break_up_sentence(passedSentence) {
     return myArray;
 
 }
+
+
+// @TODO apply the shunks and full sentences to a 2D array myCSV
+// Use two for loops to cycle through 1.) The return of each
+//  break_up_sentence() 
+//  Then have every_sentence return 2d array
+//  Keep track of 'group number'
+//  increment + 1 each full sentence
+//  if group_number > 1 
+//  add together  the previous sentences
+//  i.e.  
+//      if (groupNum !=  0 && < 5) {
+//          for (var i = 0; i < sentences.length; i--) 
+//           sentences.length - to group_num 
+//           convert these sentences as a group of cards
+//           }
+//   
+//
+//   update the CSV with something like this
+
+/*
+   for (var i = 0; i < return_stuff.length; i++) {
+	for (var j = 0; j < return_stuff[i].length; j++) { 
+		myCSV[csvRowNum][csvColNum] = return_stuff[i][j];
+		csvColNum++;
+    }
+	csvColNum = 0;
+	csvRowNum++;
+}
+*/
 
 function every_sentence_convert(sentences) {
     /* 
