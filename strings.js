@@ -209,15 +209,8 @@ function every_sentence_convert(sentences) {
 
     
 
-        if (num_sentence_group === 2) {
 
-        } else if (num_sentence_group === 3 {
 
-        } else if (num_sentence_group === 4) {
-
-        } else if (num_sentence_group === 5) {
-
-        } 
         
         }
 
