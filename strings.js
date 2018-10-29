@@ -175,15 +175,15 @@ function break_up_sentence(passedSentence) {
 //   update the CSV with something like this
 
 /*
-   for (var i = 0; i < return_stuff.length; i++) {
-	for (var j = 0; j < return_stuff[i].length; j++) { 
-		myCSV[csvRowNum][csvColNum] = return_stuff[i][j];
-		csvColNum++;
+ *
+@TODO use this approach:
+var myCSV = new Array();
+
+for (var i = 0; i < return_stuff.length; i++) {
+		myCSV.push(return_stuff[i]);
     }
-	csvColNum = 0;
-	csvRowNum++;
-}
 */
+
 
 function every_sentence_convert(sentences) {
     /* 
