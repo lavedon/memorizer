@@ -13,29 +13,36 @@ const firstTwoWords = document.querySelector('#first-two-words');
 
 // Text
 var sentenceNumber = "";
-
+var sentences;
 var myText = "";
 
 var randIndex = 0;
-
+var myCSV = [];
 
 function showSentence(sentence) {
-    currentWord.innerHTML = sentenceNumber + " " + sentence;
+    var showSentence = sentenceNumber + " " + sentence;
+    currentWord.innerHTML = showSentence;
+    return showSentence;
+
 }
 
 function underlineReplace(sentence) {
     let underlined_sentence = sentence.replace(/\B[a-zA-Z]/g, "_");
     modifiedSentence.innerHTML = sentenceNumber + " " + underlined_sentence;
+    return underlined_sentence;
 }
 
 function first_letters(sentence) {
     let first_letters = sentence.replace(/\B[a-zA-Z]/g, '').replace(/\s/g,'');
     firstLetters.innerHTML = sentenceNumber + " " + first_letters; 
+    return first_letters;
 }    
 
 function first_two_words(sentence) {
     let first_two_words = sentence.match(/[^\s]+\s+[^\s]+\s/);
     firstTwoWords.innerHTML = sentenceNumber + " " + first_two_words; 
+    first_two_words = first_two_words[0];
+    return first_two_words;
 }
 
 function change_sentence() {
@@ -48,9 +55,9 @@ function change_sentence() {
 function do_that() {
     // sentenceNumber = document.getElementById('which_number').value; 
 
-    var sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
+    sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
 
-    randIndex = Math.floor(Math.random() * sentence.length); 
+    randIndex = Math.floor(Math.random() * sentences.length); 
     sentence = sentences[randIndex];
     sentenceNumber = randIndex + 1;
     sentenceNumber = "(" + sentenceNumber + ")";
@@ -61,6 +68,51 @@ function do_that() {
     first_two_words(sentence);
 
     every_sentence_convert(sentences);
+}
+
+function break_up_sentence(sentence) {
+    /*
+     * Divide up the sentence into groups of 3, 4, and 5 words.
+     * Divide run the underlineReplace(), first_letters() , 
+     * NOT first_two_words()
+     *
+     * Add to a CSV the files.
+     *
+     * Remember, the first card only has the chunk removed.
+     * Or removed and replace with a hint.
+     *
+     * Then answer side will only have the chunk.
+     */
+      
+    let words;
+    let wordChunk;
+    let underLinedChunk;
+    let firstLetterChunk;
+    let i;
+
+
+    // 3 word chunk
+    words = sentence.split(" "); 
+    i = words;
+        for (i = words.length; i > 1; i = i - size) {
+            console.log("i is " + i);
+        
+            wordChunk = words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
+            console.log("Word chunk is " + wordChunk);
+            underLinedChunk = underlineReplace(wordChunk); 
+            console.log("Underline chunk " + underLinedChunk);
+            firstLetterChunk = first_letters(wordChunk);
+            console.log("First Letter Chunk " + firstLetterChunk);
+
+         
+    }
+
+    // 4 word chunk
+    //
+    // 5 word chunk
+
+    // Split in two
+
 }
 
 function every_sentence_convert(sentences) {
@@ -83,6 +135,7 @@ function every_sentence_convert(sentences) {
 
     Save  to array or object for CSV export.
     */
+
 
 }
 
