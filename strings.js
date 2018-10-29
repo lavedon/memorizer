@@ -69,7 +69,6 @@ function do_that() {
     first_letters(sentence);
     first_two_words(sentence);
 
-    every_sentence_convert(sentences);
 }
 
 function break_up_sentence(sentence) {
@@ -91,6 +90,10 @@ function break_up_sentence(sentence) {
     let underLinedChunk;
     let firstLetterChunk;
     let i;
+
+    // TODO CHANGE THE USER OF SENTENCE HERE.  
+    // sentence is the passed in argument AND
+    // a global variable.  Very confusing.
 
 
     // 3 word chunk
@@ -170,8 +173,34 @@ function every_sentence_convert(sentences) {
 
     Save  to array or object for CSV export.
     */
+    var num_sentence_group = 0;
+    var tempSentence;
+        for (i = sentence.length; i > -1; i--) { 
+            tempSentence = sentences[i];
+            // Chunk first sentence
+            break_up_sentence(tempSentence);
+            // make a function
+            debugger;
+            row[0] = underlineReplace(tempSentence);
+            row[1] = sentence;
+            myCSV[rowNum] = row;
+            row = [];
+            rowNum++;
 
-
+            row[0] = first_letters(tempSentence);
+            row[1] = sentence;
+            myCSV[rowNum] = row;
+            row = [];
+            rowNum++;
+            
+            row[0] = first_two_words(tempSentence);
+            row[1] = sentence;
+            myCSV[rowNum] = row;
+            row = [];
+            rowNum++;
+            console.log(myCSV);
+            break;
+        }
 }
 
 
