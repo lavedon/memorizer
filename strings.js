@@ -18,6 +18,8 @@ var myText = "";
 
 var randIndex = 0;
 var myCSV = [];
+var rowNum = 0;
+var row = [];
 
 function showSentence(sentence) {
     var showSentence = sentenceNumber + " " + sentence;
@@ -94,12 +96,21 @@ function break_up_sentence(sentence) {
     // 3 word chunk
     words = sentence.split(" "); 
     i = words;
-        for (i = words.length; i > 1; i = i - size) {
+    // Decide how you want to do this.  
+    // 3 or 4 for loops taking 3, 4, 5 word chunks?
+    // Should there be a split sentence in two?
+        for (i = words.length; i > 1; i = i - 3) {
             console.log("i is " + i);
         
             wordChunk = words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
+            row[0] = "";
+            row[1] = wordChunk; // Add to ANSWER side of row.
             console.log("Word chunk is " + wordChunk);
             underLinedChunk = underlineReplace(wordChunk); 
+            // Going to have to make a version of the sentence without this chunk
+            // Then add that to row[0];
+            myCSV[rowNum] = row; // Create a row of Question, Answer pair.
+            rowNum++; // Move to next row
             console.log("Underline chunk " + underLinedChunk);
             firstLetterChunk = first_letters(wordChunk);
             console.log("First Letter Chunk " + firstLetterChunk);
