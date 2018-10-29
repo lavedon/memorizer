@@ -16,7 +16,7 @@ var sentenceNumber = "";
 
 var myText = "";
 
-// const randIndex = 0;
+var randIndex = 0;
 
 
 function showSentence(sentence) {
@@ -44,13 +44,55 @@ function change_sentence() {
     myText = document.getElementById("sentence").value;
     do_that();
 }
-function do_that() {
-    sentenceNumber = document.getElementById('which_number').value; 
-    var sentence = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
 
-    sentence = sentence[0];
+function do_that() {
+    // sentenceNumber = document.getElementById('which_number').value; 
+
+    var sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
+
+    randIndex = Math.floor(Math.random() * sentence.length); 
+    sentence = sentences[randIndex];
+    sentenceNumber = randIndex + 1;
+    sentenceNumber = "(" + sentenceNumber + ")";
+
     showSentence(sentence);
     underlineReplace(sentence);
     first_letters(sentence);
     first_two_words(sentence);
+
+    every_sentence_convert(sentences);
+}
+
+function every_sentence_convert(sentences) {
+    /* 
+
+    Go through every sentence in reverse order.
+    Run the covert sequence and save it to an object.
+    First call a function for coverting each bit of the sentence 
+    into chunks i.e. every 3rd word with stuff removed
+    1. underline 2. letters squashed 3. blank cloze.
+
+    Do not use cloze deletion but all "type answer" 
+    Note type.
+
+    After each sentence chunks (depending on length of sentence).
+    Do the entire sentence (like in the demo in do_that function).
+    Then return cards of two sentences together.
+    Then three, then four, then 5.  No chunks larger than 5 sentences.
+    Always include the sentence number.
+
+    Save  to array or object for CSV export.
+    */
+
+}
+
+
+function number_of_sentences() {
+    // count the number of sentences
+    myText = document.getElementById("sentence").value;
+    let sentence_marks = myText.match(/[\.\!\?]/gm);
+    let sentence_num = sentence_marks.length;
+    console.log("The number of sentences is " + sentence_num);
+    document.getElementById("sentence_number").innerHTML = sentence_num;
+    return sentence_num;
 }
