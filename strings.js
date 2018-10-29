@@ -99,30 +99,54 @@ function break_up_sentence(sentence) {
     // Decide how you want to do this.  
     // 3 or 4 for loops taking 3, 4, 5 word chunks?
     // Should there be a split sentence in two?
-        for (i = words.length; i > 1; i = i - 3) {
-            console.log("i is " + i);
-        
-            wordChunk = words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
-            row[0] = "";
+    function extractChunks() {
+            row[0] = sentence.replace(wordChunk, "");
             row[1] = wordChunk; // Add to ANSWER side of row.
             console.log("Word chunk is " + wordChunk);
+            myCSV[rowNum] = row; // Create a row of Question, Answer pair.
+            row = [];
+            rowNum++; // Move to next row
+
+
             underLinedChunk = underlineReplace(wordChunk); 
+            row[0] = sentence.replace(wordChunk, underLinedChunk);
+            row[1] = wordChunk; // Add to ANSWER side of row.
             // Going to have to make a version of the sentence without this chunk
             // Then add that to row[0];
-            myCSV[rowNum] = row; // Create a row of Question, Answer pair.
-            rowNum++; // Move to next row
             console.log("Underline chunk " + underLinedChunk);
-            firstLetterChunk = first_letters(wordChunk);
-            console.log("First Letter Chunk " + firstLetterChunk);
+            myCSV[rowNum] = row;
+            row = [];
+            rowNum++;
 
-         
+
+            firstLetterChunk = first_letters(wordChunk);
+            row[0] = sentence.replace(wordChunk, firstLetterChunk);
+            row[1] = wordChunk;
+            console.log("First Letter Chunk " + firstLetterChunk);
+            myCSV[rowNum] = row;
+            row = [];
+            rowNum++;
+
+            console.log(myCSV);
+        }
+
+    for (i = words.length; i > 1; i = i - 3) {
+        wordChunk = words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
+        extractChunks(); 
     }
 
-    // 4 word chunk
-    //
-    // 5 word chunk
+    for (i = words.length; i > 1; i = 1 - 4) {
+        wordChunk = words[i - 4] + " " + words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
+        extractChunks();
+    }
 
-    // Split in two
+    for ( i = words.length; i > 1; i = 1 - 5) {
+        wordChunk = words[i - 5] + " " + words[i - 4] + " " + words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
+        extractChunks();
+    }
+    console.log("Sentence Chunked and added to myCSV");
+    console.log(myCSV);
+
 
 }
 
