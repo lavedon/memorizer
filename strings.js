@@ -173,8 +173,63 @@ function every_sentence_convert(sentences) {
 
     Save  to array or object for CSV export.
     */
-    var num_sentence_group = 0;
-    var tempSentence;
+    let num_sentence_group = 0;
+
+    var underlinedArray = [];
+    var firstLettersArray = [];
+    var sentenceChunksArray = [];
+    
+
+    underlinedArray = sentences.map(underlineReplace);
+    firstLettersArray = sentences.map(first_letters);
+    for (i = 0; i < sentences.length; i++) {
+        sentenceChunksArray[i] = sentences[i];
+        let tempChunks = extractChunks(sentences[i]);
+        sentences[i][0] = tempChunks;
+    }     
+
+
+    for (i = sentences.length; -i > 0; i--) {
+        if (num_sentence_group === sentences.length) {
+            extractChunks(sentences[i]);
+            row[0] = sentences[i];
+            row[1] = underlinedArray[i];
+            myCSV[rowNum] = row;
+            rowNum++;
+            row = [];
+
+            row[0] = sentences[i];
+            row[1] = firstLettersArray[i];
+            myCSV[rowNum] = row;
+            rowNum++;
+            row = [];
+        }
+        // OR do this with a 2D array
+        // that has each sentence and all of it's chunks.
+
+    
+
+        if (num_sentence_group === 2) {
+
+        } else if (num_sentence_group === 3 {
+
+        } else if (num_sentence_group === 4) {
+
+        } else if (num_sentence_group === 5) {
+
+        } 
+        
+        }
+
+
+            
+    }
+    
+
+}
+
+    
+/*
         for (i = sentence.length; i > -1; i--) { 
             tempSentence = sentences[i];
             // Chunk first sentence
@@ -200,8 +255,9 @@ function every_sentence_convert(sentences) {
             rowNum++;
             console.log(myCSV);
             break;
-        }
-}
+        */
+
+
 
 
 function number_of_sentences() {
