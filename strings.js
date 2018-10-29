@@ -71,9 +71,10 @@ function do_that() {
 
 }
 
-function break_up_sentence(sentence) {
+
+function break_up_sentence(passedSentence) {
     /*
-     * Divide up the sentence into groups of 3, 4, and 5 words.
+     * Divide up the passedSentence into groups of 3, 4, and 5 words.
      * Divide run the underlineReplace(), first_letters() , 
      * NOT first_two_words()
      *
@@ -85,52 +86,55 @@ function break_up_sentence(sentence) {
      * Then answer side will only have the chunk.
      */
       
+    // TODO inawer {...} where text removed
+    
     let words;
     let wordChunk;
     let underLinedChunk;
     let firstLetterChunk;
-    let i;
+    let myArray = [];
+    let myRow = [];
+    let myRowNum = 0;
 
     // TODO CHANGE THE USER OF SENTENCE HERE.  
-    // sentence is the passed in argument AND
+    // passedSentence is the passed in argument AND
     // a global variable.  Very confusing.
 
 
     // 3 word chunk
-    words = sentence.split(" "); 
+    words = passedSentence.split(" "); 
     i = words;
     // Decide how you want to do this.  
     // 3 or 4 for loops taking 3, 4, 5 word chunks?
-    // Should there be a split sentence in two?
+    // Should there be a split passedSentence in two?
     function extractChunks() {
-            row[0] = sentence.replace(wordChunk, "");
-            row[1] = wordChunk; // Add to ANSWER side of row.
+            myRow[0] = passedSentence.replace(wordChunk, "{...}");
+            myRow[1] = wordChunk; // Add to ANSWER side of row.
             console.log("Word chunk is " + wordChunk);
-            myCSV[rowNum] = row; // Create a row of Question, Answer pair.
-            row = [];
-            rowNum++; // Move to next row
+            myArray[myRowNum] = myRow; // Create a row of Question, Answer pair.
+            myRow = [];
+            myRowNum++; // Move to next row
 
 
             underLinedChunk = underlineReplace(wordChunk); 
-            row[0] = sentence.replace(wordChunk, underLinedChunk);
-            row[1] = wordChunk; // Add to ANSWER side of row.
-            // Going to have to make a version of the sentence without this chunk
+            myRow[0] = passedSentence.replace(wordChunk, underLinedChunk);
+            myRow[1] = wordChunk; // Add to ANSWER side of row.
+            // Going to have to make a version of the passedSentence without this chunk
             // Then add that to row[0];
             console.log("Underline chunk " + underLinedChunk);
-            myCSV[rowNum] = row;
-            row = [];
-            rowNum++;
+            myArray[myRowNum] = myRow;
+            myRow = [];
+            myRowNum++;
 
 
             firstLetterChunk = first_letters(wordChunk);
-            row[0] = sentence.replace(wordChunk, firstLetterChunk);
-            row[1] = wordChunk;
+            myRow[0] = passedSentence.replace(wordChunk, firstLetterChunk);
+            myRow[1] = wordChunk;
             console.log("First Letter Chunk " + firstLetterChunk);
-            myCSV[rowNum] = row;
-            row = [];
-            rowNum++;
+            myArray[myRowNum] = myRow;
+            myRow = [];
+            myRowNum++;
 
-            console.log(myCSV);
         }
 
     for (i = words.length; i > 1; i = i - 3) {
@@ -147,9 +151,7 @@ function break_up_sentence(sentence) {
         wordChunk = words[i - 5] + " " + words[i - 4] + " " + words[i - 3] + " " + words[i - 2] + " " + words[i - 1];
         extractChunks();
     }
-    console.log("Sentence Chunked and added to myCSV");
-    console.log(myCSV);
-
+    return myArray;
 
 }
 
