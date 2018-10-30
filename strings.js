@@ -17,7 +17,7 @@ var sentences;
 var myText = "";
 
 var randIndex = 0;
-var myCSV = [["", ""], ["", ""]];
+var myCSV = new Array(); 
 var rowNum = 0;
 var row = [];
 
@@ -58,6 +58,11 @@ function do_that() {
     // sentenceNumber = document.getElementById('which_number').value; 
 
     sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
+    for (var i = 0; i < sentences.length; i++) {
+        sentences[i] = sentences[i].trim();
+        console.log("Trimmed " + sentences[i]);
+    }
+
 
     randIndex = Math.floor(Math.random() * sentences.length); 
     sentence = sentences[randIndex];
@@ -86,7 +91,6 @@ function break_up_sentence(passedSentence) {
      * Then answer side will only have the chunk.
      */
       
-    // TODO inawer {...} where text removed
     
     let words;
     let wordChunk;
@@ -206,40 +210,16 @@ function every_sentence_convert(sentences) {
     Save  to array or object for CSV export.
     */
     let num_sentence_group = 0;
-
-    var underlinedArray = [];
-    var firstLettersArray = [];
-    var sentenceChunksArray = [];
-    
-
-    underlinedArray = sentences.map(underlineReplace);
-    firstLettersArray = sentences.map(first_letters);
-    for (i = 0; i < sentences.length; i++) {
-        sentenceChunksArray[i] = sentences[i];
-        let tempChunks = extractChunks(sentences[i]);
-        sentences[i][0] = tempChunks;
-    }     
-
-
-    for (i = sentences.length; -i > 0; i--) {
-        if (num_sentence_group === sentences.length) {
-            extractChunks(sentences[i]);
-            row[0] = sentences[i];
-            row[1] = underlinedArray[i];
-            myCSV[rowNum] = row;
-            rowNum++;
-            row = [];
-
-            row[0] = sentences[i];
-            row[1] = firstLettersArray[i];
-            myCSV[rowNum] = row;
-            rowNum++;
-            row = [];
-            }
-        // OR do this with a 2D array
-        // that has each sentence and all of it's chunks.
+    for (var i = sentences.length - 1; i > 0; i--) {
+        returned_chunks = break_up_sentence(sentences[i]); 
+        for (var j = 0; j < returned_chunks.length; j++) {
+            myCSV.push(returned_chunks[j]);
         }
     }
+
+
+    document.write(myCSV);
+}
 
 function number_of_sentences() {
     // count the number of sentences
