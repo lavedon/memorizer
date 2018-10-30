@@ -218,6 +218,8 @@ function every_sentence_convert(sentences) {
     }
 
     // @TODO Need something for num_GROUP
+    // Add cards up to 5 sentences in a row
+    //
     document.write(myCSV);
 }
 
