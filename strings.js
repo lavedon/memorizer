@@ -21,45 +21,61 @@ var myCSV = new Array();
 var rowNum = 0;
 var row = [];
 
-function showSentence(sentence) {
-    var showSentence = sentenceNumber + " " + sentence;
-    currentWord.innerHTML = showSentence;
-    return showSentence;
-
-}
 
 function underlineReplace(sentence) {
-    let underlined_sentence = sentence.replace(/\B[a-zA-Z]/g, "_");
-    modifiedSentence.innerHTML = sentenceNumber + " " + underlined_sentence;
-    return underlined_sentence;
+	try {
+    	let underlined_sentence = sentence.replace(/\B[a-zA-Z]/g, "_");
+    	return underlined_sentence;
+	} catch(err) {
+		console.log("underlineReplace() error");
+		console.log(err.message);
+		return "";
+	}
 }
 
 function first_letters(sentence) {
-    let first_letters = sentence.replace(/\B[a-zA-Z]/g, '').replace(/\s/g,'');
-    firstLetters.innerHTML = sentenceNumber + " " + first_letters; 
-    return first_letters;
+	try {
+    	let first_letters = sentence.replace(/\B[a-zA-Z]/g, '').replace(/\s/g,'');
+	    return first_letters;
+	} catch(err) {
+		console.log("first_letters() error");
+		console.log(err.message);
+		return ""
+	}
 }    
 
 function first_two_words(sentence) {
-    let first_two_words = sentence.match(/[^\s]+\s+[^\s]+\s/);
-    firstTwoWords.innerHTML = sentenceNumber + " " + first_two_words; 
-    first_two_words = first_two_words[0];
-    return first_two_words;
+    try {
+        let first_two_words = sentence.match(/[^\s]+\s+[^\s]+\s/);
+        first_two_words = first_two_words[0];
+        return first_two_words; 
+    } 
+    catch(err) {
+		console.log("first_two_words() error");
+        console.log(err.message);
+        return "";
+    }
+
 }
+
+
 
 function change_sentence() {
     console.log("change the sentence");
-
-    myText = document.getElementById("sentence").value;
     do_that();
 }
 
 function get_text() {
+    myText = document.getElementById("sentence").value;
     myText = myText.trim();
     sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
     for (let x = 0; x < sentences.length; x++) {
         sentences[x] = sentences[x].replace("\n", "");
-        sentences[x] = sentences[x].replace("|", "");
+        sentences[x] = sentences[x].replace(";", "");
+    }
+    if (sentences[sentences.length - 1].length < 4) {
+        sentences.pop(sentences.length - 1);
+        console.log("Cut off tiny last sentence");
     }
 }
 
@@ -73,10 +89,10 @@ function do_that() {
     sentenceNumber = randIndex + 1;
     sentenceNumber = "(" + sentenceNumber + ")";
 
-    showSentence(sentence);
-    underlineReplace(sentence);
-    first_letters(sentence);
-    first_two_words(sentence);
+    currentWord.innerHTML = sentenceNumber + " " + sentence;
+    modifiedSentence.innerHTML = sentenceNumber + " " + underlineReplace(sentence);
+    firstLetters.innerHTML = sentenceNumber + " " + first_letters(sentence);
+    firstTwoWords.innerHTML = sentenceNumber + " " + first_two_words(sentence);
 
 }
 
@@ -175,54 +191,111 @@ function every_sentence_convert(sentences) {
 
     Save  to array or object for CSV export.
     */
-    var tempArray = new Array();
     var num_sentence_group = 0;
+   
     for (var sen_i = sentences.length - 1; sen_i > 0; sen_i--) {
         returned_chunks = break_up_sentence(sentences[sen_i]); 
         for (var j = 0; j < returned_chunks.length; j++) {
             myCSV.push(returned_chunks[j]);
         }
         // This works for making a 2D Array and pushing the sentences
-        tempArray.push(underlineReplace(sentences[sen_i]))
-        tempArray.push(sentences[sen_i]);
-
-        tempArray.push(first_letters(sentences[sen_i]));
-        tempArray.push(sentences[sen_i]);
-
-        tempArray.push(first_two_words[sen_i]);
-        tempArray.push(sentences[sen_i]);
-        myCSV.push(tempArray);
+        // @TODO problem:  it is returning every sentence
+        
+        let sentenceArray = [];
+        sentenceArray = pull_sentences(sentences[sen_i]);
+        update_myCSV(sentenceArray);
         num_sentence_group++;
 
     if (num_sentence_group !== 1 && num_sentence_group < 6) {
          // Grab the previous sentences needed in the group.
         //  EXAMPLE: If group number is 3, grab the last 3, 
         //  the last 2, and the last 1 sentence.
+
+        //  SOMETHING IS WRONG HERE.
         for (var y = num_sentence_group; y > 0; y--) {
+            var groupArray = [];
+            var quesAnswer = [];
             console.log("sen_i === " + sen_i);
-            var which_sentence = sen_i - num_sentence_group;
-            console.log("which_sentence === " + which_sentence);
-            if (which_sentence > 0) {
-                tempArray.push(underlineReplace(sentences[which_sentence]));
-                tempArray.push(sentences[which_sentence]);
+            // This should really call a function.
+                // @TODO make one function that does this
+                for (var which_sentence = sen_i - num_sentence_group; which_sentence !== sen_i; which_sentence++) {
+                    groupArray.push(pull_sentences(sentences[which_sentence]));
+                }
+				
+				// Something like this but use a loop
+				//	quesAnswer.push([groupArray[arrayI][0][0] + " " + groupArray[arrayI + 1][0][0], groupArray[arrayI][0][1] + " " + groupArray[arrayI + 1][0][1]]);
+				for (let arrayI = 0; arrayI < groupArray.length - 1; arrayI++) {
+			   //  quesAnswer.push([groupArray[arrayI][0][0] + " " + groupArray[arrayI + 1][0][0], groupArray[arrayI][0][1] + " " + groupArray[arrayI + 1][0][1]]);
+					
 
-                tempArray.push(first_letters(sentences[which_sentence]));
-                tempArray.push(sentences[which_sentence]);
+					    let strX = "";
+						let strY = "";
 
-                tempArray.push(first_two_words(sentences[which_sentence]));
-                tempArray.push(sentences[which_sentence]);
+						for (let x = 0; x < groupArray.length - 1; x++) {
+							strX += groupArray[x][0][0] + "<br />";
+							strY += groupArray[x][0][1] + "<br />";
+							}
+						
+					quesAnswer.push([strX, strY]);
+					
+						strX = "";
+						for (let x = 0; x < groupArray.length - 1; x++) {
+							strX += groupArray[x][1][0] + "<br />";
+						}
+					quesAnswer.push([strX, strY]);
+						strX = "";
+						for (let x = 0; x < groupArray.length - 1; x++) {
+							strX += groupArray[x][2][0] + "<br />";
+						}
 
-                myCSV.push(tempArray);
-                // num_sentence_group++;
-                } 
-            } 
+					}
+				update_myCSV(quesAnswer);
+				}
+					
+					debugger;
+                    
+                    
+                 
+            // update_myCSV(groupArray);
+		update_myCSV(quesAnswer);
+        console.log("quesAnswer array is : " + quesAnswer + " hope it is FLAT ENOUGH");
+
         } else if (num_sentence_group === 6) {
             num_sentence_group = 0;
             }
+
   } // end for loop (var i = = sentences.length - 1; i > 0; i--) 
 
+
+
+function pull_sentences(mySentence) {
+        let tempArray = [];
+        let tempRow = [];
+        tempRow.push(underlineReplace(mySentence));
+        tempRow.push(mySentence);
+        tempArray.push(tempRow);
+        tempRow = [];
+
+        tempRow.push(first_letters(mySentence));
+        tempRow.push(mySentence);
+        tempArray.push(tempRow);
+        tempRow = [];
+
+        tempRow.push(first_two_words(mySentence));
+        tempRow.push(mySentence);
+        tempArray.push(tempRow);
+        tempRow = [];
+        
+        return (tempArray);
+}
+
+        function update_myCSV(tempArray) {
+        for (let tempI = 0; tempI < tempArray.length; tempI++) {
+            myCSV.push(tempArray[tempI]);
+            }
+        }
     downloadableCSV(myCSV);
-} // end function
+} // end function every_sentence_convert(sentences) 
 
 function downloadableCSV(rows) {
     var csv = "";
@@ -231,8 +304,7 @@ function downloadableCSV(rows) {
         csv += '\n';
     });
     csv = csv.replace(/"/g, "\"\"");
-    console.log(csv);
-    debugger;
+
     var hiddenElement = document.getElementById('dummy_download');
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
     hiddenElement.target = '_blank';
