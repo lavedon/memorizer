@@ -57,6 +57,7 @@ function change_sentence() {
 function do_that() {
     // sentenceNumber = document.getElementById('which_number').value; 
 
+    myText = myText.trim();
     sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
 
     randIndex = Math.floor(Math.random() * sentences.length); 
@@ -109,7 +110,6 @@ function break_up_sentence(passedSentence) {
     function extractChunks() {
             myRow[0] = passedSentence.replace(wordChunk, "{...}");
             myRow[1] = wordChunk; // Add to ANSWER side of row.
-            console.log("Word chunk is " + wordChunk);
             myArray[myRowNum] = myRow; // Create a row of Question, Answer pair.
             myRow = [];
             myRowNum++; // Move to next row
@@ -120,7 +120,6 @@ function break_up_sentence(passedSentence) {
             myRow[1] = wordChunk; // Add to ANSWER side of row.
             // Going to have to make a version of the passedSentence without this chunk
             // Then add that to row[0];
-            console.log("Underline chunk " + underLinedChunk);
             myArray[myRowNum] = myRow;
             myRow = [];
             myRowNum++;
@@ -129,7 +128,6 @@ function break_up_sentence(passedSentence) {
             firstLetterChunk = first_letters(wordChunk);
             myRow[0] = passedSentence.replace(wordChunk, firstLetterChunk);
             myRow[1] = wordChunk;
-            console.log("First Letter Chunk " + firstLetterChunk);
             myArray[myRowNum] = myRow;
             myRow = [];
             myRowNum++;
@@ -173,17 +171,6 @@ function break_up_sentence(passedSentence) {
 //
 //   update the CSV with something like this
 
-/*
- *
-@TODO use this approach:
-var myCSV = new Array();
-
-for (var i = 0; i < return_stuff.length; i++) {
-		myCSV.push(return_stuff[i]);
-    }
-*/
-
-
 function every_sentence_convert(sentences) {
     /* 
 
@@ -204,24 +191,54 @@ function every_sentence_convert(sentences) {
 
     Save  to array or object for CSV export.
     */
-    let tempArray = new Array();
-    let num_sentence_group = 0;
-    for (var i = sentences.length - 1; i > 0; i--) {
-        returned_chunks = break_up_sentence(sentences[i]); 
+    var tempArray = new Array();
+    var num_sentence_group = 0;
+    for (var sen_i = sentences.length - 1; sen_i > 0; sen_i--) {
+        returned_chunks = break_up_sentence(sentences[sen_i]); 
         for (var j = 0; j < returned_chunks.length; j++) {
             myCSV.push(returned_chunks[j]);
         }
         // This works for making a 2D Array and pushing the sentences
-        tempArray.push(underlineReplace(sentences[i]))
-        tempArray.push(sentences[i]);
-        myCSV.push(tempArray);
-    }
+        tempArray.push(underlineReplace(sentences[sen_i]))
+        tempArray.push(sentences[sen_i]);
 
-    // @TODO Need something for num_GROUP
-    // Add cards up to 5 sentences in a row
-    //
+        tempArray.push(first_letters(sentences[sen_i]));
+        tempArray.push(sentences[sen_i]);
+
+        tempArray.push(first_two_words[sen_i]);
+        tempArray.push(sentences[sen_i]);
+        myCSV.push(tempArray);
+        num_sentence_group++;
+
+    if (num_sentence_group !== 1 && num_sentence_group < 6) {
+         // Grab the previous sentences needed in the group.
+        //  EXAMPLE: If group number is 3, grab the last 3, 
+        //  the last 2, and the last 1 sentence.
+        for (var y = num_sentence_group; y > 0; y--) {
+            console.log("sen_i === " + sen_i);
+            var which_sentence = sen_i - num_sentence_group;
+            console.log("which_sentence === " + which_sentence);
+            if (which_sentence > 0) {
+                tempArray.push(underlineReplace(sentences[which_sentence]));
+                tempArray.push(sentences[which_sentence]);
+
+                tempArray.push(first_letters(sentences[which_sentence]));
+                tempArray.push(sentences[which_sentence]);
+
+                tempArray.push(first_two_words(sentences[which_sentence]));
+                tempArray.push(sentences[which_sentence]);
+
+                myCSV.push(tempArray);
+                // num_sentence_group++;
+                } 
+            } 
+        } else if (num_sentence_group === 6) {
+            num_sentence_group = 0;
+            }
+  } // end for loop (var i = = sentences.length - 1; i > 0; i--) 
+
     document.write(myCSV);
-}
+} // end function
 
 function number_of_sentences() {
     // count the number of sentences
