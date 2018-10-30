@@ -237,8 +237,20 @@ function every_sentence_convert(sentences) {
             }
   } // end for loop (var i = = sentences.length - 1; i > 0; i--) 
 
-    document.write(myCSV);
+    downloadableCSV(myCSV);
 } // end function
+
+function downloadableCSV(rows) {
+    var content = "data:text/csv;charset=utf-8,";
+
+    rows.forEach(function(row, index)
+        {
+            content += row.join(",") + "\n";
+        });
+    document.write(rows);
+    window.open(rows);
+}
+
 
 function number_of_sentences() {
     // count the number of sentences
