@@ -58,11 +58,6 @@ function do_that() {
     // sentenceNumber = document.getElementById('which_number').value; 
 
     sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
-    for (var i = 0; i < sentences.length; i++) {
-        sentences[i] = sentences[i].trim();
-        console.log("Trimmed " + sentences[i]);
-    }
-
 
     randIndex = Math.floor(Math.random() * sentences.length); 
     sentence = sentences[randIndex];
@@ -209,15 +204,20 @@ function every_sentence_convert(sentences) {
 
     Save  to array or object for CSV export.
     */
+    let tempArray = new Array();
     let num_sentence_group = 0;
     for (var i = sentences.length - 1; i > 0; i--) {
         returned_chunks = break_up_sentence(sentences[i]); 
         for (var j = 0; j < returned_chunks.length; j++) {
             myCSV.push(returned_chunks[j]);
         }
+        // This works for making a 2D Array and pushing the sentences
+        tempArray.push(underlineReplace(sentences[i]))
+        tempArray.push(sentences[i]);
+        myCSV.push(tempArray);
     }
 
-
+    // @TODO Need something for num_GROUP
     document.write(myCSV);
 }
 
