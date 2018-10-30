@@ -67,10 +67,12 @@ function change_sentence() {
 
 function get_text() {
     myText = document.getElementById("sentence").value;
+    myText = myText.replace(/[\n\r]/g, "");
+    myText = myText.replace(/\s{2,10}/g, " ");
     myText = myText.trim();
     sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
     for (let x = 0; x < sentences.length; x++) {
-        sentences[x] = sentences[x].replace("\n", "");
+        sentences[x] = sentences[x].replace(/[\n\r]/g, "");
         sentences[x] = sentences[x].replace(";", "");
     }
     if (sentences[sentences.length - 1].length < 4) {
