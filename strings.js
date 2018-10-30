@@ -215,12 +215,15 @@ function every_sentence_convert(sentences) {
         for (var y = num_sentence_group; y > 0; y--) {
             var groupArray = [];
             var quesAnswer = [];
-            console.log("sen_i === " + sen_i);
             // This should really call a function.
                 // @TODO make one function that does this
+            if (sen_i - num_sentence_group > 0) {
                 for (var which_sentence = sen_i - num_sentence_group; which_sentence !== sen_i; which_sentence++) {
                     groupArray.push(pull_sentences(sentences[which_sentence]));
                 }
+            } else {
+                break;
+            }
 				
 				// Something like this but use a loop
 				//	quesAnswer.push([groupArray[arrayI][0][0] + " " + groupArray[arrayI + 1][0][0], groupArray[arrayI][0][1] + " " + groupArray[arrayI + 1][0][1]]);
