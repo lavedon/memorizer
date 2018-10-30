@@ -54,11 +54,19 @@ function change_sentence() {
     do_that();
 }
 
+function get_text() {
+    myText = myText.trim();
+    sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
+    for (let x = 0; x < sentences.length; x++) {
+        sentences[x] = sentences[x].replace("\n", "");
+        sentences[x] = sentences[x].replace("|", "");
+    }
+}
+
 function do_that() {
     // sentenceNumber = document.getElementById('which_number').value; 
 
-    myText = myText.trim();
-    sentences = myText.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g);
+    get_text();
 
     randIndex = Math.floor(Math.random() * sentences.length); 
     sentence = sentences[randIndex];
@@ -96,24 +104,12 @@ function break_up_sentence(passedSentence) {
     let myRow = [];
     let myRowNum = 0;
 
-    // TODO CHANGE THE USER OF SENTENCE HERE.  
-    // passedSentence is the passed in argument AND
-    // a global variable.  Very confusing.
+    get_text();
 
-
-    // 3 word chunk
     words = passedSentence.split(" "); 
     i = words;
-    // Decide how you want to do this.  
-    // 3 or 4 for loops taking 3, 4, 5 word chunks?
-    // Should there be a split passedSentence in two?
-    function extractChunks() {
-            myRow[0] = passedSentence.replace(wordChunk, "{...}");
-            myRow[1] = wordChunk; // Add to ANSWER side of row.
-            myArray[myRowNum] = myRow; // Create a row of Question, Answer pair.
-            myRow = [];
-            myRowNum++; // Move to next row
 
+    function extractChunks() {
 
             underLinedChunk = underlineReplace(wordChunk); 
             myRow[0] = passedSentence.replace(wordChunk, underLinedChunk);
@@ -132,6 +128,11 @@ function break_up_sentence(passedSentence) {
             myRow = [];
             myRowNum++;
 
+            myRow[0] = passedSentence.replace(wordChunk, "{...}");
+            myRow[1] = wordChunk; // Add to ANSWER side of row.
+            myArray[myRowNum] = myRow; // Create a row of Question, Answer pair.
+            myRow = [];
+            myRowNum++; // Move to next row
         }
 
     for (i = words.length; i > 1; i = i - 3) {
@@ -153,23 +154,6 @@ function break_up_sentence(passedSentence) {
 }
 
 
-// @TODO apply the shunks and full sentences to a 2D array myCSV
-// Use two for loops to cycle through 1.) The return of each
-//  break_up_sentence() 
-//  Then have every_sentence return 2d array
-//  Keep track of 'group number'
-//  increment + 1 each full sentence
-//  if group_number > 1 
-//  add together  the previous sentences
-//  i.e.  
-//      if (groupNum !=  0 && < 5) {
-//          for (var i = 0; i < sentences.length; i--) 
-//           sentences.length - to group_num 
-//           convert these sentences as a group of cards
-//           }
-//   
-//
-//   update the CSV with something like this
 
 function every_sentence_convert(sentences) {
     /* 
@@ -241,14 +225,19 @@ function every_sentence_convert(sentences) {
 } // end function
 
 function downloadableCSV(rows) {
-    var content = "data:text/csv;charset=utf-8,";
-
-    rows.forEach(function(row, index)
-        {
-            content += row.join(",") + "\n";
-        });
-    document.write(rows);
-    window.open(rows);
+    var csv = "";
+    rows.forEach(function(row) {
+        csv += row.join(';');
+        csv += '\n';
+    });
+    csv = csv.replace(/"/g, "\"\"");
+    console.log(csv);
+    debugger;
+    var hiddenElement = document.getElementById('dummy_download');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'anki.txt';
+    hiddenElement.click();
 }
 
 
